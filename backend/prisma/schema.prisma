@@ -94,6 +94,10 @@ model User {
   caregiverAlerts CaregiverAlert[] @relation("CaregiverAlerts")
   weeklyReports   WeeklyReport[]
 
+  // CHAT RELATIONS (ADD THIS)
+  patientConversations   Conversation[] @relation("PatientConversations")
+  caregiverConversations Conversation[] @relation("CaregiverConversations")
+
   @@map("users")
 }
 
@@ -351,4 +355,27 @@ model DeviceToken {
 
   @@index([userId])
   @@map("device_tokens")
+}
+
+model Conversation {
+  id          String   @id @default(uuid())
+  patientId   String
+  caregiverId String
+  createdAt   DateTime @default(now())
+
+  patient   User      @relation("PatientConversations", fields: [patientId], references: [id])
+  caregiver User      @relation("CaregiverConversations", fields: [caregiverId], references: [id])
+  messages  Message[]
+
+  @@unique([patientId, caregiverId])
+}
+
+model Message {
+  id             String   @id @default(uuid())
+  conversationId String
+  senderId       String
+  text           String
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
 }

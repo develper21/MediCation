@@ -12,6 +12,7 @@ const adherenceRoutes = require("./routes/adherence.routes");
 const caregiverRoutes = require("./routes/caregiver.routes");
 const notificationRoutes = require("./routes/notification.routes");
 const reportRoutes = require("./routes/report.routes");
+const chatRoutes = require("./routes/chat.routes");
 const healthRoutes = require("./routes/health.routes");
 
 const { errorHandler } = require("./middlewares/errorHandler");
@@ -71,6 +72,7 @@ app.use(`${API}/adherence`, adherenceRoutes);
 app.use(`${API}/caregivers`, caregiverRoutes);
 app.use(`${API}/notifications`, notificationRoutes);
 app.use(`${API}/reports`, reportRoutes);
+app.use(`${API}/chat`, chatRoutes);
 app.use(`${API}/health`, healthRoutes);
 
 // ─── Error Handling ───────────────────────────────────────────────────────────

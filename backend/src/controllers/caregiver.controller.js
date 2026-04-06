@@ -41,6 +41,22 @@ const respondToLinkRequest = async (req, res, next) => {
 
         if (accept) {
             await prisma.caregiverLink.update({ where: { id: linkId }, data: { isAccepted: true } });
+            
+            // Auto-create conversation when link is accepted
+            await prisma.conversation.upsert({
+                where: {
+                    patientId_caregiverId: {
+                        patientId: req.user.id,
+                        caregiverId: link.caregiverId
+                    }
+                },
+                update: {},
+                create: {
+                    patientId: req.user.id,
+                    caregiverId: link.caregiverId
+                }
+            });
+            
             sendSuccess(res, {}, "Link accepted. Caregiver can now monitor you.");
         } else {
             await prisma.caregiverLink.delete({ where: { id: linkId } });
