@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { LayoutDashboard, Users, AlertCircle, BarChart3, User, LogOut, Bell } from 'lucide-react'
+import { LayoutDashboard, Users, AlertCircle, BarChart3, User, LogOut, Bell, MessageCircle } from 'lucide-react'
 
 export default function CaregiverLayout() {
   const navigate = useNavigate()
@@ -11,6 +11,7 @@ export default function CaregiverLayout() {
   const menuItems = [
     { path: '/caregiver/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/caregiver/patients', label: 'Patients', icon: Users },
+    { path: '/caregiver/chat', label: 'Chat', icon: MessageCircle },
     { path: '/caregiver/alerts', label: 'Alerts', icon: AlertCircle },
     { path: '/caregiver/reports', label: 'Reports', icon: BarChart3 },
     { path: '/caregiver/profile', label: 'Profile', icon: User }
@@ -128,7 +129,7 @@ export default function CaregiverLayout() {
 
         {/* Page Content - Using Outlet for nested routes */}
         <div className="flex-1 overflow-auto">
-          <div className="p-8">
+          <div className={isActive('/caregiver/chat') ? 'h-full' : 'p-8'}>
             <Outlet />
           </div>
         </div>
