@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="8" fill="#2F5B8C"/>
+  
+  <!-- White Circle Background -->
+  <circle cx="16" cy="16" r="12" fill="white"/>
+  
+  <!-- Letter M -->
+  <text x="16" y="22" font-family="Arial, sans-serif" font-size="15" font-weight="bold" fill="#2F5B8C" text-anchor="middle">M</text>
+  
+  <!-- Plus Symbol (Medical Cross) at top right -->
+  <circle cx="24" cy="8" r="4" fill="#3E6FA3"/>
+  <path d="M24 6 L24 10 M22 8 L26 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

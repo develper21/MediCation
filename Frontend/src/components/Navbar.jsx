@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import Logo from './Logo'
 
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuth()
@@ -9,9 +8,19 @@ export default function Navbar() {
     <nav className="bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-3">
         <div className="flex justify-between items-center">
-          {/* Logo */}
-          <Link to="/" className="flex items-center hover:opacity-90 transition duration-200">
-            <Logo size="default" showText={true} />
+          {/* Logo with Favicon Icon */}
+          <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition duration-200">
+            {/* Favicon Icon */}
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <rect width="100" height="100" rx="20" fill="#2F5B8C"/>
+                <circle cx="50" cy="50" r="35" fill="white"/>
+                <text x="50" y="68" fontFamily="Arial, sans-serif" fontSize="45" fontWeight="bold" fill="#2F5B8C" textAnchor="middle">M</text>
+                <circle cx="75" cy="25" r="12" fill="#3E6FA3"/>
+                <path d="M75 19 L75 31 M69 25 L81 25" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <span className="text-xl font-bold text-[#2F5B8C]">MediTrack</span>
           </Link>
 
           {/* Right Side */}

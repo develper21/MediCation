@@ -7,11 +7,36 @@ export default function Signup() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [role, setRole] = useState('patient')
   const [notification, setNotification] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
   const { register } = useAuth()
+
+  // Password strength calculation
+  const getPasswordStrength = (pwd) => {
+    let score = 0
+    if (!pwd) return { score: 0, label: '' }
+    
+    // Length check
+    if (pwd.length >= 8) score += 1
+    if (pwd.length >= 12) score += 1
+    
+    // Character variety checks
+    if (/[a-z]/.test(pwd)) score += 1
+    if (/[A-Z]/.test(pwd)) score += 1
+    if (/[0-9]/.test(pwd)) score += 1
+    if (/[^a-zA-Z0-9]/.test(pwd)) score += 1
+    
+    // Determine label and color
+    if (score <= 2) return { score, label: 'Weak', color: 'bg-red-500', textColor: 'text-red-500' }
+    if (score <= 4) return { score, label: 'Medium', color: 'bg-yellow-500', textColor: 'text-yellow-500' }
+    return { score, label: 'Strong', color: 'bg-green-500', textColor: 'text-green-500' }
+  }
+
+  const passwordStrength = getPasswordStrength(password)
+  const strengthPercentage = Math.min((passwordStrength.score / 6) * 100, 100)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -156,6 +181,68 @@ export default function Signup() {
 
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Role Selection */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    Select Your Role
+                  </label>
+                  <div className="flex gap-2">
+                    {/* Patient */}
+                    <button
+                      type="button"
+                      onClick={() => setRole('patient')}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-2 rounded-lg border-2 transition-all ${
+                        role === 'patient'
+                          ? 'bg-[#2F5B8C] text-white border-[#2F5B8C] shadow-lg'
+                          : 'bg-white text-gray-700 border-gray-200 hover:border-[#2F5B8C] hover:bg-[#F9FAFB]'
+                      }`}
+                    >
+                      <div className={`p-1 rounded-lg ${role === 'patient' ? 'bg-white/20' : 'bg-[#EAEFF5]'}`}>
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                      </div>
+                      <span className="font-semibold text-xs">Patient</span>
+                    </button>
+                    
+                    {/* Caregiver */}
+                    <button
+                      type="button"
+                      onClick={() => setRole('doctor')}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-2 rounded-lg border-2 transition-all ${
+                        role === 'doctor'
+                          ? 'bg-[#2F5B8C] text-white border-[#2F5B8C] shadow-lg'
+                          : 'bg-white text-gray-700 border-gray-200 hover:border-[#2F5B8C] hover:bg-[#F9FAFB]'
+                      }`}
+                    >
+                      <div className={`p-1 rounded-lg ${role === 'doctor' ? 'bg-white/20' : 'bg-[#EAEFF5]'}`}>
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                        </svg>
+                      </div>
+                      <span className="font-semibold text-xs">Caregiver</span>
+                    </button>
+                    
+                    {/* Admin */}
+                    <button
+                      type="button"
+                      onClick={() => setRole('admin')}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-2 rounded-lg border-2 transition-all ${
+                        role === 'admin'
+                          ? 'bg-[#2F5B8C] text-white border-[#2F5B8C] shadow-lg'
+                          : 'bg-white text-gray-700 border-gray-200 hover:border-[#2F5B8C] hover:bg-[#F9FAFB]'
+                      }`}
+                    >
+                      <div className={`p-1 rounded-lg ${role === 'admin' ? 'bg-white/20' : 'bg-[#EAEFF5]'}`}>
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                        </svg>
+                      </div>
+                      <span className="font-semibold text-xs">Admin</span>
+                    </button>
+                  </div>
+                </div>
+
                 {/* Full Name */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -191,72 +278,51 @@ export default function Signup() {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Password
                   </label>
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={8}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2F5B8C] focus:border-transparent transition-all"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Minimum 8 characters (backend requirement)
-                  </p>
-                </div>
-
-                {/* Role Selection */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-4">
-                    Select Your Role
-                  </label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { 
-                        value: 'patient', 
-                        label: 'Patient', 
-                        desc: 'Take medications',
-                        icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                      },
-                      { 
-                        value: 'doctor', 
-                        label: 'Caregiver', 
-                        desc: 'Manage patients',
-                        icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
-                      },
-                      { 
-                        value: 'admin', 
-                        label: 'Administrator', 
-                        desc: 'System admin',
-                        icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.72-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-                      }
-                    ].map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => setRole(option.value)}
-                        className={`py-3 px-2 rounded-lg transition-all flex flex-col items-center gap-2 border-2 ${
-                          role === option.value
-                            ? 'bg-[#2F5B8C] text-white border-[#2F5B8C] shadow-lg'
-                            : 'bg-white text-gray-700 border-gray-200 hover:border-[#2F5B8C] hover:bg-[#F9FAFB]'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg transition-all ${
-                          role === option.value 
-                            ? 'bg-white/20' 
-                            : 'bg-[#EAEFF5]'
-                        }`}>
-                          {option.icon}
-                        </div>
-                        <span className="font-semibold text-sm">{option.label}</span>
-                        <span className={`text-xs leading-tight text-center ${
-                          role === option.value 
-                            ? 'text-white/90' 
-                            : 'text-gray-500'
-                        }`}>{option.desc}</span>
-                      </button>
-                    ))}
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={8}
+                      className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2F5B8C] focus:border-transparent transition-all"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-[#2F5B8C] transition-colors"
+                      tabIndex={-1}>
+                      {showPassword ? (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      )}
+                    </button>
                   </div>
+                  
+                  {/* Password Strength Indicator */}
+                  {password && (
+                    <div className="mt-2 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">Password Strength:</span>
+                        <span className={`text-xs font-semibold ${passwordStrength.textColor}`}>
+                          {passwordStrength.label}
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full ${passwordStrength.color} transition-all duration-300 ease-out`}
+                          style={{ width: `${strengthPercentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Terms */}
@@ -264,14 +330,25 @@ export default function Signup() {
                   By signing up, you agree to our Terms and Privacy Policy
                 </p>
 
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-3 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-[#2F5B8C] to-[#3E6FA3] hover:shadow-lg transition-all duration-300 disabled:opacity-50 mt-6"
-                >
-                  {isLoading ? 'Creating Account...' : 'Create Account'}
-                </button>
+                {/* Submit and Home Buttons */}
+                <div className="flex gap-3 mt-6">
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="flex-1 py-3 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-[#2F5B8C] to-[#3E6FA3] hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+                  >
+                    {isLoading ? 'Creating Account...' : 'Create Account'}
+                  </button>
+                  <Link
+                    to="/"
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-[#2F5B8C] bg-[#EAEFF5] hover:bg-[#DDE5EE] transition-all duration-300"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Home
+                  </Link>
+                </div>
               </form>
 
               {/* Divider */}
@@ -295,13 +372,6 @@ export default function Signup() {
                   Your data is encrypted and secure. HIPAA compliant.
                 </p>
               </div>
-            </div>
-
-            {/* Back to Home */}
-            <div className="text-center mt-6">
-              <Link to="/" className="text-sm text-gray-600 hover:text-gray-900 font-semibold">
-                Back to Home
-              </Link>
             </div>
           </div>
         </div>
