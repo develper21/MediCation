@@ -17,6 +17,7 @@ import AdherenceReport from '../pages/AdherenceReport'
 import Profile from '../pages/Profile'
 import Notifications from '../pages/Notifications'
 import PatientDetail from '../pages/PatientDetail'
+import PatientChat from '../pages/PatientChat'
 import Alerts from '../pages/Alerts'
 
 // Caregiver Components
@@ -27,6 +28,10 @@ import CaregiverAlerts from '../pages/CaregiverAlerts'
 import CaregiverReports from '../pages/CaregiverReports'
 import CaregiverProfile from '../pages/CaregiverProfile'
 import CaregiverNotifications from '../pages/CaregiverNotifications'
+import CaregiverChat from '../pages/CaregiverChat'
+
+// Doctor Components
+import DoctorChat from '../pages/DoctorChat'
 
 // Admin Components
 import AdminLayout from '../components/AdminLayout'
@@ -131,6 +136,14 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/chat"
+        element={
+          <ProtectedRoute requiredRole="patient">
+            <PatientChat />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Shared Routes */}
       <Route
@@ -168,6 +181,14 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/doctor/chat"
+        element={
+          <ProtectedRoute requiredRole="doctor">
+            <DoctorChat />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Caregiver Nested Routes */}
       <Route
@@ -184,6 +205,7 @@ export default function AppRoutes() {
         <Route path="reports" element={<CaregiverReports />} />
         <Route path="profile" element={<CaregiverProfile />} />
         <Route path="notifications" element={<CaregiverNotifications />} />
+        <Route path="chat" element={<CaregiverChat />} />
       </Route>
 
       {/* Default Caregiver Redirect */}

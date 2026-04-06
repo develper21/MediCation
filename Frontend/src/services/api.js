@@ -405,6 +405,23 @@ class ApiService {
       body: { currentPassword, newPassword },
     })
   }
+
+  // ============ CHAT APIs ============
+
+  async getConversations() {
+    return this.request('/chat/conversations')
+  }
+
+  async getMessages(conversationId) {
+    return this.request(`/chat/messages/${conversationId}`)
+  }
+
+  async sendMessage(conversationId, text) {
+    return this.request('/chat/send', {
+      method: 'POST',
+      body: { conversationId, text },
+    })
+  }
 }
 
 // Create and export singleton instance
