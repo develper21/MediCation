@@ -1,0 +1,2601 @@
+{
+  "info": {
+    "name": "MediTrack - Frontend Routes & Client API Collection",
+    "_postman_id": "meditrack-frontend-routes-v1",
+    "description": "Complete Postman collection for the MediTrack Frontend Application. Contains every Single Frontend Page & Client Route (React Router v6 in Vite at http://localhost:5173), along with every Frontend API Service Client Endpoint (api.js layer) mapped to the backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "frontendUrl",
+      "value": "http://localhost:5173",
+      "type": "string",
+      "description": "Vite Frontend Dev Server URL"
+    },
+    {
+      "key": "apiUrl",
+      "value": "http://localhost:5000",
+      "type": "string",
+      "description": "Backend API Base URL"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "JWT Access Token stored in localStorage"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string",
+      "description": "JWT Refresh Token"
+    },
+    {
+      "key": "medicationId",
+      "value": "med-uuid-12345",
+      "type": "string",
+      "description": "Sample medication ID"
+    },
+    {
+      "key": "patientId",
+      "value": "patient-uuid-12345",
+      "type": "string",
+      "description": "Sample patient ID"
+    },
+    {
+      "key": "tokenParam",
+      "value": "token-sample-string",
+      "type": "string",
+      "description": "Verification or reset token parameter"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Frontend Web Application Pages",
+      "item": [
+        {
+          "name": "Public Pages",
+          "item": [
+            {
+              "name": "Landing Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    ""
+                  ]
+                },
+                "description": "Public landing page (`/`). Features system overview, features, and call-to-actions."
+              },
+              "response": []
+            },
+            {
+              "name": "Login Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/login",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                },
+                "description": "Login page (`/login`). User enters email and password."
+              },
+              "response": []
+            },
+            {
+              "name": "Signup Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/signup",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "signup"
+                  ]
+                },
+                "description": "Registration page (`/signup`). User inputs name, email, password, and selects role."
+              },
+              "response": []
+            },
+            {
+              "name": "Verify Email Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/verify-email/:token",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "verify-email",
+                    ":token"
+                  ],
+                  "variable": [
+                    {
+                      "key": "token",
+                      "value": "{{tokenParam}}",
+                      "description": "Email verification token"
+                    }
+                  ]
+                },
+                "description": "Client email verification handler page (`/verify-email/:token`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Forgot Password Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/forgot-password",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "forgot-password"
+                  ]
+                },
+                "description": "Request password reset link page (`/forgot-password`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Reset Password Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/reset-password/:token",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "reset-password",
+                    ":token"
+                  ],
+                  "variable": [
+                    {
+                      "key": "token",
+                      "value": "{{tokenParam}}",
+                      "description": "Password reset token"
+                    }
+                  ]
+                },
+                "description": "Set new password page (`/reset-password/:token`)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Patient Portal Pages (Role: PATIENT)",
+          "item": [
+            {
+              "name": "Patient Dashboard",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/dashboard",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "dashboard"
+                  ]
+                },
+                "description": "Main dashboard (`/dashboard`). Shows today's schedule, pending doses, adherence score, and current streak."
+              },
+              "response": []
+            },
+            {
+              "name": "Medication History Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/medication-history",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "medication-history"
+                  ]
+                },
+                "description": "Medication history view (`/medication-history`). Shows past taken, late, and missed dose logs."
+              },
+              "response": []
+            },
+            {
+              "name": "Add Medication Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/add-medication",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "add-medication"
+                  ]
+                },
+                "description": "Add new medication form (`/add-medication`). Input dosage, frequency, times, dates."
+              },
+              "response": []
+            },
+            {
+              "name": "Edit Medication Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/edit-medication/:medicationId",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "edit-medication",
+                    ":medicationId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "medicationId",
+                      "value": "{{medicationId}}",
+                      "description": "Medication ID"
+                    }
+                  ]
+                },
+                "description": "Edit existing medication form (`/edit-medication/:medicationId`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Medication Schedule Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/schedule",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "schedule"
+                  ]
+                },
+                "description": "Weekly and daily calendar medication schedule (`/schedule`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Adherence Analytics Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/adherence",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "adherence"
+                  ]
+                },
+                "description": "Adherence charts, progress metrics, and compliance score (`/adherence`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Adherence Report Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/adherence-report",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "adherence-report"
+                  ]
+                },
+                "description": "Full printable/exportable adherence report page (`/adherence-report`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Patient Chat Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/chat",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "chat"
+                  ]
+                },
+                "description": "Patient chat page (`/chat`) to message linked caregiver or doctor."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Shared Pages (Authenticated)",
+          "item": [
+            {
+              "name": "User Profile Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/profile",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "profile"
+                  ]
+                },
+                "description": "User personal profile and account settings (`/profile`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Notifications Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/notifications",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "notifications"
+                  ]
+                },
+                "description": "Notifications center (`/notifications`). View and mark alerts."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Doctor Portal Pages (Role: DOCTOR)",
+          "item": [
+            {
+              "name": "Doctor Patient Detail View",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/patient/:patientId",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "patient",
+                    ":patientId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "patientId",
+                      "value": "{{patientId}}",
+                      "description": "Patient UUID"
+                    }
+                  ]
+                },
+                "description": "Doctor's view of an individual patient's records (`/patient/:patientId`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Doctor Alerts Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/alerts",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "alerts"
+                  ]
+                },
+                "description": "Doctor patient adherence alerts and missed dose flags (`/alerts`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Doctor Chat Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/doctor/chat",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "doctor",
+                    "chat"
+                  ]
+                },
+                "description": "Doctor communication console (`/doctor/chat`)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Caregiver Portal Pages (Role: CAREGIVER / DOCTOR)",
+          "item": [
+            {
+              "name": "Caregiver Dashboard",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/caregiver/dashboard",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "caregiver",
+                    "dashboard"
+                  ]
+                },
+                "description": "Caregiver main dashboard overview (`/caregiver/dashboard`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Caregiver Patients List",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/caregiver/patients",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "caregiver",
+                    "patients"
+                  ]
+                },
+                "description": "List of all patients monitored by the caregiver (`/caregiver/patients`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Caregiver Alerts Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/caregiver/alerts",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "caregiver",
+                    "alerts"
+                  ]
+                },
+                "description": "Caregiver adherence alerts and critical missed dose warnings (`/caregiver/alerts`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Caregiver Reports Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/caregiver/reports",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "caregiver",
+                    "reports"
+                  ]
+                },
+                "description": "Caregiver patient compliance and adherence reports (`/caregiver/reports`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Caregiver Profile Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/caregiver/profile",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "caregiver",
+                    "profile"
+                  ]
+                },
+                "description": "Caregiver profile and notifications preference settings (`/caregiver/profile`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Caregiver Notifications Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/caregiver/notifications",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "caregiver",
+                    "notifications"
+                  ]
+                },
+                "description": "Caregiver notifications list (`/caregiver/notifications`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Caregiver Chat Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/caregiver/chat",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "caregiver",
+                    "chat"
+                  ]
+                },
+                "description": "Caregiver communication channel with patients (`/caregiver/chat`)."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Admin Portal Pages (Role: ADMIN)",
+          "item": [
+            {
+              "name": "Admin Dashboard",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/admin/dashboard",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "dashboard"
+                  ]
+                },
+                "description": "System admin metrics and system overview (`/admin/dashboard`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Users Management Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/admin/users",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "users"
+                  ]
+                },
+                "description": "Admin user list, role management, and accounts (`/admin/users`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Admin System Alerts Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/admin/alerts",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "alerts"
+                  ]
+                },
+                "description": "System error and warning alerts (`/admin/alerts`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Analytics Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/admin/analytics",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "analytics"
+                  ]
+                },
+                "description": "Global adherence analytics and platform statistics (`/admin/analytics`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Settings Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/admin/settings",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "settings"
+                  ]
+                },
+                "description": "System configuration and environment settings (`/admin/settings`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Notifications Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/admin/notifications",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "notifications"
+                  ]
+                },
+                "description": "System-wide notification broadcasts (`/admin/notifications`)."
+              },
+              "response": []
+            },
+            {
+              "name": "Admin Profile Page",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{frontendUrl}}/admin/profile",
+                  "host": [
+                    "{{frontendUrl}}"
+                  ],
+                  "path": [
+                    "admin",
+                    "profile"
+                  ]
+                },
+                "description": "Admin personal profile (`/admin/profile`)."
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 - Frontend API Client Services (api.js Integration)",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{token}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Auth Service APIs",
+          "item": [
+            {
+              "name": "api.login()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/login",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "login"
+                  ]
+                },
+                "description": "Frontend login API call: saves tokens in localStorage.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.register()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/register",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "register"
+                  ]
+                },
+                "description": "Frontend registration API call.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"role\": \"PATIENT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.logout()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/logout",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "logout"
+                  ]
+                },
+                "description": "Frontend logout API call: clears localStorage and revokes refreshToken.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.getCurrentUser()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/me",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "me"
+                  ]
+                },
+                "description": "Frontend getCurrentUser call."
+              },
+              "response": []
+            },
+            {
+              "name": "api.forgotPassword()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/forgot-password",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "forgot-password"
+                  ]
+                },
+                "description": "Frontend forgotPassword call.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"user@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.resetPassword()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/reset-password",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "reset-password"
+                  ]
+                },
+                "description": "Frontend resetPassword call.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"{{tokenParam}}\",\n  \"password\": \"NewPassword123!\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.verifyEmail()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/verify-email/:token",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "verify-email",
+                    ":token"
+                  ],
+                  "variable": [
+                    {
+                      "key": "token",
+                      "value": "{{tokenParam}}",
+                      "description": "Verification Token"
+                    }
+                  ]
+                },
+                "description": "Frontend verifyEmail call.",
+                "auth": {
+                  "type": "noauth"
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.refreshToken()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/auth/refresh",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "auth",
+                    "refresh"
+                  ]
+                },
+                "description": "Frontend automatic 401 interceptor token refresh call.",
+                "auth": {
+                  "type": "noauth"
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Medication Service APIs",
+          "item": [
+            {
+              "name": "api.getMedications()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/medications?isActive=true",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "medications"
+                  ],
+                  "query": [
+                    {
+                      "key": "isActive",
+                      "value": "true",
+                      "description": "",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Frontend fetch all medications."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getMedication(id)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/medications/:id",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "medications",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{medicationId}}",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend fetch single medication."
+              },
+              "response": []
+            },
+            {
+              "name": "api.createMedication()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/medications",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "medications"
+                  ]
+                },
+                "description": "Frontend create medication.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Metformin\",\n  \"dosage\": \"500mg\",\n  \"frequency\": \"DAILY\",\n  \"times\": [\n    \"08:00\"\n  ],\n  \"startDate\": \"2026-01-01\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.updateMedication(id)",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/medications/:id",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "medications",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{medicationId}}",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend update medication.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Metformin\",\n  \"dosage\": \"1000mg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.deleteMedication(id)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/medications/:id",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "medications",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "{{medicationId}}",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend deactivate medication."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getTodaySchedule()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/medications/today",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "medications",
+                    "today"
+                  ]
+                },
+                "description": "Frontend get today's scheduled doses."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getWeeklySchedule()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/medications/weekly",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "medications",
+                    "weekly"
+                  ]
+                },
+                "description": "Frontend get 7-day schedule."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Dose Service APIs",
+          "item": [
+            {
+              "name": "api.logDose()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/doses/log",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "doses",
+                    "log"
+                  ]
+                },
+                "description": "Frontend dose check-in button.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"doseScheduleId\": \"{{doseScheduleId}}\",\n  \"medicationId\": \"{{medicationId}}\",\n  \"notes\": \"Taken\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.skipDose()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/doses/skip",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "doses",
+                    "skip"
+                  ]
+                },
+                "description": "Frontend skip dose button.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"doseScheduleId\": \"{{doseScheduleId}}\",\n  \"reason\": \"Nausea\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.getDoseHistory()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/doses/history?page=1&limit=20",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "doses",
+                    "history"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1",
+                      "description": "",
+                      "disabled": false
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20",
+                      "description": "",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Frontend dose history log."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getMissedDoses()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/doses/missed",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "doses",
+                    "missed"
+                  ]
+                },
+                "description": "Frontend missed doses."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getPendingDoses()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/doses/pending",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "doses",
+                    "pending"
+                  ]
+                },
+                "description": "Frontend pending doses for dashboard."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Adherence Service APIs",
+          "item": [
+            {
+              "name": "api.getAdherenceScore()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/adherence/score?period=30",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "adherence",
+                    "score"
+                  ],
+                  "query": [
+                    {
+                      "key": "period",
+                      "value": "30",
+                      "description": "",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Frontend adherence score gauge widget."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getDailyAdherence()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/adherence/daily?date=2026-09-26",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "adherence",
+                    "daily"
+                  ],
+                  "query": [
+                    {
+                      "key": "date",
+                      "value": "2026-09-26",
+                      "description": "",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Frontend single day compliance breakdown."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getStreak()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/adherence/streak",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "adherence",
+                    "streak"
+                  ]
+                },
+                "description": "Frontend adherence streak counter."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getAdherenceRange()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/adherence/range?startDate=2026-09-01&endDate=2026-09-26",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "adherence",
+                    "range"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2026-09-01",
+                      "description": "",
+                      "disabled": false
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2026-09-26",
+                      "description": "",
+                      "disabled": false
+                    }
+                  ]
+                },
+                "description": "Frontend custom date range adherence chart."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Caregiver Service APIs",
+          "item": [
+            {
+              "name": "api.getMyPatients()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/patients",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "patients"
+                  ]
+                },
+                "description": "Frontend caregiver patients list."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getPatientDetail(patientId)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/patients/:patientId",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "patients",
+                    ":patientId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "patientId",
+                      "value": "{{patientId}}",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend caregiver patient details."
+              },
+              "response": []
+            },
+            {
+              "name": "api.sendLinkRequest()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/link",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "link"
+                  ]
+                },
+                "description": "Frontend link request modal.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"patientEmail\": \"patient@example.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.respondToLinkRequest()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/link/respond",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "link",
+                    "respond"
+                  ]
+                },
+                "description": "Frontend accept/reject link invitation.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"linkId\": \"link-uuid\",\n  \"accept\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.getPendingLinkRequests()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/link/pending",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "link",
+                    "pending"
+                  ]
+                },
+                "description": "Frontend pending link alerts banner."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getCaregiverAlerts()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/alerts",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "alerts"
+                  ]
+                },
+                "description": "Frontend caregiver alerts feed."
+              },
+              "response": []
+            },
+            {
+              "name": "api.markAlertRead(alertId)",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/alerts/:alertId/read",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "alerts",
+                    ":alertId",
+                    "read"
+                  ],
+                  "variable": [
+                    {
+                      "key": "alertId",
+                      "value": "alert-uuid",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend dismiss caregiver alert."
+              },
+              "response": []
+            },
+            {
+              "name": "api.unlinkPatient(patientId)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/caregivers/patients/:patientId",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "caregivers",
+                    "patients",
+                    ":patientId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "patientId",
+                      "value": "{{patientId}}",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend unlink patient confirmation."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Report Service APIs",
+          "item": [
+            {
+              "name": "api.getWeeklyReport()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/reports/weekly",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "reports",
+                    "weekly"
+                  ]
+                },
+                "description": "Frontend weekly summary report."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getReportHistory()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/reports/history",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "reports",
+                    "history"
+                  ]
+                },
+                "description": "Frontend weekly reports archive."
+              },
+              "response": []
+            },
+            {
+              "name": "api.emailWeeklyReport()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/reports/email",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "reports",
+                    "email"
+                  ]
+                },
+                "description": "Frontend 'Email Report' button."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getPatientReport(patientId)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/reports/patient/:patientId/weekly",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "reports",
+                    "patient",
+                    ":patientId",
+                    "weekly"
+                  ],
+                  "variable": [
+                    {
+                      "key": "patientId",
+                      "value": "{{patientId}}",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend caregiver patient weekly report view."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Notification Service APIs",
+          "item": [
+            {
+              "name": "api.getNotifications()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/notifications",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "notifications"
+                  ]
+                },
+                "description": "Frontend notification panel."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getUnreadCount()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/notifications/unread-count",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "notifications",
+                    "unread-count"
+                  ]
+                },
+                "description": "Frontend header notification badge counter."
+              },
+              "response": []
+            },
+            {
+              "name": "api.markNotificationsAsRead()",
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/notifications/read",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "notifications",
+                    "read"
+                  ]
+                },
+                "description": "Frontend mark-all-read action.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": []\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.deleteNotification(id)",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/notifications/:id",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "notifications",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "notif-uuid",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend delete notification item."
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "User & Profile Service APIs",
+          "item": [
+            {
+              "name": "api.getUserProfile()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/users/profile",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "profile"
+                  ]
+                },
+                "description": "Frontend profile page loader."
+              },
+              "response": []
+            },
+            {
+              "name": "api.updateUserProfile()",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/users/profile",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "profile"
+                  ]
+                },
+                "description": "Frontend update profile submit.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"John\",\n  \"phone\": \"+1234567890\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "api.changePassword()",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/users/change-password",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "users",
+                    "change-password"
+                  ]
+                },
+                "description": "Frontend change password submit.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"currentPassword\": \"OldPass\",\n  \"newPassword\": \"NewPass\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Chat Service APIs",
+          "item": [
+            {
+              "name": "api.getConversations()",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/chat/conversations",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "chat",
+                    "conversations"
+                  ]
+                },
+                "description": "Frontend chat conversations list sidebar."
+              },
+              "response": []
+            },
+            {
+              "name": "api.getMessages(conversationId)",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/chat/messages/:conversationId",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "chat",
+                    "messages",
+                    ":conversationId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "conversationId",
+                      "value": "conv-uuid",
+                      "description": ""
+                    }
+                  ]
+                },
+                "description": "Frontend chat messages feed."
+              },
+              "response": []
+            },
+            {
+              "name": "api.sendMessage()",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json",
+                    "type": "text"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{apiUrl}}/api/v1/chat/send",
+                  "host": [
+                    "{{apiUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "chat",
+                    "send"
+                  ]
+                },
+                "description": "Frontend chat send message input.",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"conversationId\": \"conv-uuid\",\n  \"text\": \"Hello!\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
