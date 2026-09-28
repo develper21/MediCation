@@ -1,0 +1,2149 @@
+{
+  "info": {
+    "name": "MediTrack - Backend API Collection",
+    "_postman_id": "meditrack-backend-api-v1",
+    "description": "Comprehensive and exhaustive Postman collection for the MediTrack / Medication Adherence System Backend API (Node.js, Express, Prisma, PostgreSQL). Includes all authentication, medication management, dose tracking, adherence scoring, caregiver/doctor relationships, notifications, reports, and real-time chat endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "JWT Access Token for Bearer Authorization"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string",
+      "description": "JWT Refresh Token"
+    },
+    {
+      "key": "medicationId",
+      "value": "med-uuid-12345",
+      "type": "string",
+      "description": "Medication UUID"
+    },
+    {
+      "key": "doseScheduleId",
+      "value": "dose-uuid-12345",
+      "type": "string",
+      "description": "Dose Schedule UUID"
+    },
+    {
+      "key": "patientId",
+      "value": "patient-uuid-12345",
+      "type": "string",
+      "description": "Patient User UUID"
+    },
+    {
+      "key": "conversationId",
+      "value": "conv-uuid-12345",
+      "type": "string",
+      "description": "Chat Conversation UUID"
+    },
+    {
+      "key": "alertId",
+      "value": "alert-uuid-12345",
+      "type": "string",
+      "description": "Caregiver Alert UUID"
+    },
+    {
+      "key": "notificationId",
+      "value": "notif-uuid-12345",
+      "type": "string",
+      "description": "Notification UUID"
+    },
+    {
+      "key": "linkId",
+      "value": "link-uuid-12345",
+      "type": "string",
+      "description": "Caregiver-Patient Link UUID"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Health Checks",
+      "item": [
+        {
+          "name": "Root Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check if the server is running and get general service health status.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "API v1 Health Check (With DB Check)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "health"
+              ]
+            },
+            "description": "Detailed system and PostgreSQL database connectivity check (returns uptime and service status).",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "01 - Authentication",
+      "item": [
+        {
+          "name": "Register User (Signup)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a new user account. Valid roles: `PATIENT`, `CAREGIVER`, `DOCTOR`, `ADMIN`. Generates verification token and default streak.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"patient@example.com\",\n  \"password\": \"SecurePassword123!\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phone\": \"+1234567890\",\n  \"role\": \"PATIENT\",\n  \"timezone\": \"America/New_York\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/verify-email/:token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "verify-email",
+                ":token"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "verification-token-string",
+                  "description": "Email verification token"
+                }
+              ]
+            },
+            "description": "Verify user's email address using the token received in email. Returns HTML success confirmation page with redirection to login.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate user with email and password. Returns `accessToken`, `refreshToken`, and user info.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"patient@example.com\",\n  \"password\": \"SecurePassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Access Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "Rotate and exchange a valid refresh token for a new access token and new refresh token.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Logout user and invalidate their stored refresh token.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password (Request Reset)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/forgot-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "forgot-password"
+              ]
+            },
+            "description": "Initiate password reset. Sends a reset link containing a reset token to the user's email.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"patient@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password Form (GET HTML)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/reset-password/:token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "reset-password",
+                ":token"
+              ],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": "reset-token-string",
+                  "description": "Password reset token"
+                }
+              ]
+            },
+            "description": "Renders the web HTML form for user to enter a new password.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password (POST Submission)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "reset-password"
+              ]
+            },
+            "description": "Resets the user's password using the token and invalidates all existing refresh sessions.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"reset-token-string\",\n  \"password\": \"BrandNewPassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current Authenticated User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Fetch logged-in user profile, role, verification status, and timestamps."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - Users",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "profile"
+              ]
+            },
+            "description": "Retrieves complete user profile along with current adherence streak information."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "profile"
+              ]
+            },
+            "description": "Updates user's personal details, medical info, and timezone.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phone\": \"+1987654321\",\n  \"dateOfBirth\": \"1990-05-15\",\n  \"gender\": \"male\",\n  \"bloodGroup\": \"O+\",\n  \"allergies\": [\n    \"Penicillin\",\n    \"Peanuts\"\n  ],\n  \"conditions\": [\n    \"Hypertension\"\n  ],\n  \"timezone\": \"America/New_York\",\n  \"avatarUrl\": \"https://example.com/avatar.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/change-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "change-password"
+              ]
+            },
+            "description": "Change password for the logged-in user with current password validation.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"SecurePassword123!\",\n  \"newPassword\": \"UpdatedSecurePassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register Device Token (Push Notifications)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/device-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "device-token"
+              ]
+            },
+            "description": "Registers device token for Web Push, Android (FCM), or iOS (APNS).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"fcm_or_apns_device_token_string_here\",\n  \"platform\": \"web\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deactivate Account",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/account",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "account"
+              ]
+            },
+            "description": "Deactivates the current user's account (`isActive: false`)."
+          },
+          "response": []
+        },
+        {
+          "name": "List All Users (Admin Only)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "PATIENT",
+                  "description": "Filter by role: PATIENT, CAREGIVER, DOCTOR, ADMIN",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number",
+                  "disabled": false
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Administrator endpoint to list and paginate all registered users."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Medications",
+      "item": [
+        {
+          "name": "Create Medication",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medications"
+              ]
+            },
+            "description": "Create a new medication regimen and automatically schedule upcoming doses for the next 7 days based on user's timezone.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lisinopril\",\n  \"brandName\": \"Prinivil\",\n  \"dosage\": \"10mg\",\n  \"unit\": \"tablet\",\n  \"frequency\": \"DAILY\",\n  \"customDays\": [],\n  \"times\": [\n    \"08:00\",\n    \"20:00\"\n  ],\n  \"startDate\": \"2026-01-01\",\n  \"endDate\": \"2026-12-31\",\n  \"instructions\": \"Take with food and full glass of water\",\n  \"refillDate\": \"2026-02-15\",\n  \"totalQuantity\": 60,\n  \"color\": \"#3B82F6\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Medications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medications?isActive=true",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medications"
+              ],
+              "query": [
+                {
+                  "key": "isActive",
+                  "value": "true",
+                  "description": "Filter by active status (true/false)",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Returns all medications belonging to the authenticated patient."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Today's Medication Schedule",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medications/today",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medications",
+                "today"
+              ]
+            },
+            "description": "Returns all dose schedules for today along with medication details, status, and local timezone."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Weekly Medication Schedule",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medications/weekly",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medications",
+                "weekly"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2026-09-26",
+                  "description": "Starting date (YYYY-MM-DD)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Returns the weekly calendar of scheduled medication doses for the 7-day period."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Medication By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medications/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{medicationId}}",
+                  "description": "Medication UUID"
+                }
+              ]
+            },
+            "description": "Returns details of a specific medication including the 10 most recent dose schedules."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Medication",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medications/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{medicationId}}",
+                  "description": "Medication UUID"
+                }
+              ]
+            },
+            "description": "Update medication details. Automatically recalculates upcoming pending dose schedules if timing or frequency changed.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Lisinopril\",\n  \"dosage\": \"20mg\",\n  \"frequency\": \"DAILY\",\n  \"times\": [\n    \"09:00\"\n  ],\n  \"instructions\": \"Take every morning with breakfast\",\n  \"remainingQty\": 45\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete (Deactivate) Medication",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/medications/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "medications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{medicationId}}",
+                  "description": "Medication UUID"
+                }
+              ]
+            },
+            "description": "Deactivates a medication (`isActive: false`). Does not permanently delete historic logs."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - Doses",
+      "item": [
+        {
+          "name": "Log Dose (Check-in)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/doses/log",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "doses",
+                "log"
+              ]
+            },
+            "description": "Check in and record a dose. The system calculates whether the dose is TAKEN on time or LATE, updates adherence stats, and increases streak.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doseScheduleId\": \"{{doseScheduleId}}\",\n  \"medicationId\": \"{{medicationId}}\",\n  \"takenAt\": \"2026-09-26T08:15:00.000Z\",\n  \"notes\": \"Taken on time with glass of water\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Skip Dose",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/doses/skip",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "doses",
+                "skip"
+              ]
+            },
+            "description": "Mark a scheduled dose as SKIPPED with an optional reason note.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doseScheduleId\": \"{{doseScheduleId}}\",\n  \"medicationId\": \"{{medicationId}}\",\n  \"reason\": \"Doctor advised skipping due to mild side effects\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dose History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/doses/history?page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "doses",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "medicationId",
+                  "value": "{{medicationId}}",
+                  "description": "Filter by medication UUID",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "TAKEN",
+                  "description": "Filter status: TAKEN, LATE, SKIPPED, MISSED",
+                  "disabled": true
+                },
+                {
+                  "key": "startDate",
+                  "value": "2026-09-01",
+                  "description": "Start date (YYYY-MM-DD)",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-09-26",
+                  "description": "End date (YYYY-MM-DD)",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number",
+                  "disabled": false
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Fetch paginated history of all taken, late, and skipped doses."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Missed Doses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/doses/missed",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "doses",
+                "missed"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2026-09-01",
+                  "description": "Start date",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-09-26",
+                  "description": "End date",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Fetch all past dose schedules whose window has closed without being taken."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pending Doses (Today)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/doses/pending",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "doses",
+                "pending"
+              ]
+            },
+            "description": "Fetch all doses scheduled for today for quick action."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Adherence",
+      "item": [
+        {
+          "name": "Get Full Adherence Report (1 Year)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/adherence/report",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "adherence",
+                "report"
+              ]
+            },
+            "description": "Returns full comprehensive adherence breakdown across medications and dose history over the past year."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Adherence Score",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/adherence/score?period=30",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "adherence",
+                "score"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "30",
+                  "description": "Number of days to calculate adherence score for (e.g., 7, 30, 90)",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Returns overall adherence percentage score and scheduled/taken/missed/late/skipped count breakdown."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Daily Adherence",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/adherence/daily?date=2026-09-26",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "adherence",
+                "daily"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-09-26",
+                  "description": "Target date (YYYY-MM-DD)",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Returns breakdown of scheduled, taken, late, missed, and skipped doses for a single specific day."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Adherence Streak",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/adherence/streak",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "adherence",
+                "streak"
+              ]
+            },
+            "description": "Returns the current day streak and longest streak achieved."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Adherence Date Range",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/adherence/range?startDate=2026-09-01&endDate=2026-09-26",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "adherence",
+                "range"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2026-09-01",
+                  "description": "Start date (YYYY-MM-DD)",
+                  "disabled": false
+                },
+                {
+                  "key": "endDate",
+                  "value": "2026-09-26",
+                  "description": "End date (YYYY-MM-DD)",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Returns adherence score and daily breakdown for an arbitrary custom date range."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06 - Caregivers & Doctors",
+      "item": [
+        {
+          "name": "Send Link Request to Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/link",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "link"
+              ]
+            },
+            "description": "Caregiver or Doctor sends a link connection request to a patient by email.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientEmail\": \"patient@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Respond to Link Request (Patient)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/link/respond",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "link",
+                "respond"
+              ]
+            },
+            "description": "Patient approves or rejects a caregiver link request. Automatically creates a conversation thread upon acceptance.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"linkId\": \"{{linkId}}\",\n  \"accept\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pending Link Requests (Patient)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/link/pending",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "link",
+                "pending"
+              ]
+            },
+            "description": "Retrieves incoming caregiver/doctor link requests waiting for patient approval."
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Patients (Caregiver / Doctor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/patients",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "patients"
+              ]
+            },
+            "description": "Returns list of all linked patients, including their profiles and 30-day adherence scores."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient Detail (Caregiver / Doctor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/patients/:patientId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "patients",
+                ":patientId"
+              ],
+              "variable": [
+                {
+                  "key": "patientId",
+                  "value": "{{patientId}}",
+                  "description": "Patient UUID"
+                }
+              ]
+            },
+            "description": "Detailed view of patient profile, active medications, recent dose logs, streak, and unread alerts."
+          },
+          "response": []
+        },
+        {
+          "name": "Unlink Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/patients/:patientId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "patients",
+                ":patientId"
+              ],
+              "variable": [
+                {
+                  "key": "patientId",
+                  "value": "{{patientId}}",
+                  "description": "Patient UUID"
+                }
+              ]
+            },
+            "description": "Removes caregiver/doctor link to a patient."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Caregiver Alerts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/alerts?status=UNREAD&page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "alerts"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "UNREAD",
+                  "description": "Filter: UNREAD, READ, ALL",
+                  "disabled": false
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number",
+                  "disabled": false
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Fetches alerts generated for missed patient doses, low adherence, or system warnings."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Alert as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/caregivers/alerts/:alertId/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "caregivers",
+                "alerts",
+                ":alertId",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "alertId",
+                  "value": "{{alertId}}",
+                  "description": "Alert UUID"
+                }
+              ]
+            },
+            "description": "Updates caregiver alert status to READ."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07 - Notifications",
+      "item": [
+        {
+          "name": "Get User Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications?page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "isRead",
+                  "value": "false",
+                  "description": "Filter: true or false",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number",
+                  "disabled": false
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Returns list of in-app reminders and notifications with unread count."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Unread Notifications Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/unread-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "unread-count"
+              ]
+            },
+            "description": "Quick endpoint to poll or query the number of unread notifications for notification badges."
+          },
+          "response": []
+        },
+        {
+          "name": "Process Pending Reminders (Fallback)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/process-reminders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "process-reminders"
+              ]
+            },
+            "description": "Fallback mechanism to dispatch dose reminders for upcoming window (used if background cron is delayed)."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notifications as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "read"
+              ]
+            },
+            "description": "Mark specific notification IDs as read, or pass empty array/body to mark all notifications as read.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\n    \"{{notificationId}}\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Notification",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{notificationId}}",
+                  "description": "Notification UUID"
+                }
+              ]
+            },
+            "description": "Permanently delete an individual notification."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "08 - Reports",
+      "item": [
+        {
+          "name": "Get Comprehensive Adherence Report (30 Days)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/adherence",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "adherence"
+              ]
+            },
+            "description": "Returns complete adherence statistics, medication breakdowns, and daily logs for the past 30 days."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Weekly Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/weekly",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "weekly"
+              ],
+              "query": [
+                {
+                  "key": "weekStart",
+                  "value": "2026-09-21",
+                  "description": "Week start date (YYYY-MM-DD)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Returns or generates the weekly adherence summary report, including best and worst adherence days."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reports History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/history?page=1&limit=12",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number",
+                  "disabled": false
+                },
+                {
+                  "key": "limit",
+                  "value": "12",
+                  "description": "Items per page",
+                  "disabled": false
+                }
+              ]
+            },
+            "description": "Returns paginated list of all archived weekly adherence reports."
+          },
+          "response": []
+        },
+        {
+          "name": "Email Weekly Report to User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "email"
+              ]
+            },
+            "description": "Generates current weekly report and sends it formatted to user's registered email address."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Patient Weekly Report (Caregiver / Doctor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/patient/:patientId/weekly",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "reports",
+                "patient",
+                ":patientId",
+                "weekly"
+              ],
+              "query": [
+                {
+                  "key": "weekStart",
+                  "value": "2026-09-21",
+                  "description": "Week start date (YYYY-MM-DD)",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "patientId",
+                  "value": "{{patientId}}",
+                  "description": "Patient UUID"
+                }
+              ]
+            },
+            "description": "Allows linked caregiver or doctor to inspect a specific patient's weekly adherence report."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "09 - Chat & Messaging",
+      "item": [
+        {
+          "name": "Get All Conversations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chat/conversations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "conversations"
+              ]
+            },
+            "description": "Returns all active chat conversations for the user with latest message preview."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Messages for Conversation",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chat/messages/:conversationId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "messages",
+                ":conversationId"
+              ],
+              "variable": [
+                {
+                  "key": "conversationId",
+                  "value": "{{conversationId}}",
+                  "description": "Conversation UUID"
+                }
+              ]
+            },
+            "description": "Fetches message history for a given conversation thread."
+          },
+          "response": []
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/chat/send",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "chat",
+                "send"
+              ]
+            },
+            "description": "Sends a new message in a conversation thread between patient and caregiver/doctor.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"text\": \"Hello, have you taken your afternoon medication yet?\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
