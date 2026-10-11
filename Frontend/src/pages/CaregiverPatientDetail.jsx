@@ -282,11 +282,11 @@ export default function CaregiverPatientDetail() {
               </Link>
             </div>
 
-            {recentActivity.length === 0 ? (
+            {doseHistory.length === 0 ? (
               <p className="text-gray-500 text-center py-8">No recent activity</p>
             ) : (
               <div className="space-y-3">
-                {recentActivity.map((log, idx) => (
+                {doseHistory.map((log, idx) => (
                   <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                     <div className="flex items-center gap-4">
                       <div className={`w-3 h-3 rounded-full ${
