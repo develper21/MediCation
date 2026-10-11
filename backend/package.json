@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "build": "npx prisma generate && npx prisma db push",
+    "build": "prisma generate",
+    "lint": "eslint \"src/**/*.js\" \"tests/**/*.test.js\"",
+    "test": "node --test tests/*.test.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
@@ -29,6 +31,8 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "eslint": "^9.39.5",
+    "globals": "^16.5.0",
     "nodemon": "^3.1.7",
     "prisma": "5.22.0"
   }
