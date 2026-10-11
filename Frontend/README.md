@@ -73,6 +73,18 @@ npm run dev
 
 Frontend runs on: **http://localhost:5173**
 
+## 🧪 Tests and CI
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+Component tests are in `tests/` and run with Vitest and Testing Library. The
+GitHub Actions workflow runs install, lint, test, and build checks for both
+applications.
+
 ---
 
 ## 📁 Project Structure
