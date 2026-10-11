@@ -91,7 +91,9 @@ Server runs on: **http://localhost:5000**
 ```bash
 npm run dev          # Start with nodemon (development)
 npm start            # Start production server
-npm run build        # Generate Prisma client + push schema
+npm run build        # Generate Prisma client (no database connection required)
+npm run lint         # Lint backend source and tests
+npm test             # Run backend unit tests
 npm run db:generate  # Generate Prisma client
 npm run db:migrate   # Create and apply migrations
 npm run db:push      # Push schema changes
@@ -99,6 +101,13 @@ npm run db:reset     # Drop and recreate database
 npm run db:seed      # Seed sample data
 npm run db:studio    # Open Prisma Studio UI
 ```
+
+## 🧪 Tests and CI
+
+Backend unit tests use Node's built-in test runner and are located in `tests/`.
+The GitHub Actions workflow installs dependencies, lints, tests, and builds the
+backend and frontend independently. Database schema changes remain an explicit
+deployment/setup step via `npm run db:push` or `npm run db:migrate`.
 
 ---
 
@@ -505,7 +514,6 @@ All errors return standardized JSON format:
 ---
 
 **Last Updated**: April 2026
-
 
 
 
